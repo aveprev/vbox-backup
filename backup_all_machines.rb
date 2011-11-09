@@ -1,7 +1,16 @@
+VBOX_MANAGE = "/usr/bin/VBoxManage"
 BACKUP_DIR = "/srv/vm/Backup/"
 
+def exec_vbox_manage(*params)
+  params.map! { |p| p.include?("\s") ? "\"#{p}\"" : p }
+  params_string = params.join "\s"
+  exec_string = "#{VBOX_MANAGE} #{params_string}"
+  puts "Executing VBoxManage command:\n#{exec_string}"
+  `#{exec_string}`
+end
+
 def get_available_machine_names
-  `VBoxManage list vms`.lines.map { |l| l.scan(/".*"/)[0].slice(1..-2) }
+  exec_vbox_manage("list", "vms").lines.map { |l| l.scan(/".*"/)[0].slice(1..-2) }
 end
 
 def generate_timestamp_string
@@ -17,16 +26,17 @@ def generate_machine_clone_name(machine_name)
 end
 
 def take_snapshot(machine_name, snapshot_name)
-  `VBoxManage snapshot \"#{machine_name}\" take \"#{snapshot_name}\" --pause`
+  exec_vbox_manage "snapshot", machine_name, "take", snapshot_name, "--pause"
 end
 
 def clone_machine(machine_name, snapshot_name)
   machine_clone_name = generate_machine_clone_name(machine_name)
-  `VBoxManage clonevm \"#{machine_name}\" --snapshot \"#{snapshot_name}\" --name \"#{machine_clone_name}\" --mode machineandchildren --basefolder #{BACKUP_DIR}`
+  exec_vbox_manage "clonevm", machine_name, "--snapshot", snapshot_name, "--name",
+      machine_clone_name, "--mode", "machine", "--basefolder", BACKUP_DIR
 end
 
 def delete_snapshot(machine_name, snapshot_name)
-  `VBoxManage snapshot \"#{machine_name}\" delete \"#{snapshot_name}\"`
+  exec_vbox_manage "snapshot", machine_name, "delete", snapshot_name
 end
 
 def do_backup(machine_names)
