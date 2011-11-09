@@ -48,5 +48,5 @@ def do_backup(machine_names)
   end
 end
 
-do_backup(get_avaliable_machine_names)
+do_backup(get_available_machine_names)
 
