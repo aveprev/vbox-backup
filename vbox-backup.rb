@@ -51,7 +51,7 @@ def do_backup(machine_names, output_dir)
   end
 end
 
-def do_backup_al(output_dir)
+def do_backup_all(output_dir)
   do_backup(get_available_machine_names, output_dir)
 end
 
