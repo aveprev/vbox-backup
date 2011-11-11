@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require "optparse"
 
 VBOX_MANAGE = "/usr/bin/VBoxManage"
