@@ -8,7 +8,7 @@ def exec_vbox_manage(*params)
   params.map! { |p| p.include?("\s") ? "\"#{p}\"" : p }
   params_string = params.join "\s"
   exec_string = "#{VBOX_MANAGE} #{params_string}"
-  puts "Executing VBoxManage command:\n#{exec_string}"
+  puts "[#{Time.new}] Executing VBoxManage command:\n#{exec_string}"
   `#{exec_string}`
 end
 
