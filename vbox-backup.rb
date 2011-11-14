@@ -35,7 +35,7 @@ end
 def clone_machine(machine_name, snapshot_name, output_dir)
   machine_clone_name = generate_machine_clone_name(machine_name)
   exec_vbox_manage "clonevm", machine_name, "--snapshot", snapshot_name, "--name",
-      machine_clone_name, "--mode", "machine", "--basefolder", output_dir
+      machine_clone_name, "--mode", "machine", "--options", "keepallmacs", "--basefolder", output_dir
 end
 
 def delete_snapshot(machine_name, snapshot_name)
